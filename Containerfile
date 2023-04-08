@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     build-essential \
     && rm -rf /var/lib/apt/lists/* && \
-    curl -sSL https://install.python-poetry.org | python3 - --version 1.4
+    curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
 
 COPY app.py poetry.lock pyproject.toml .
 

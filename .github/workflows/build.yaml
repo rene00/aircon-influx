@@ -1,0 +1,33 @@
+name: Build and publish container
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME: aircon-influx
+  IMAGE_TAG: latest
+  CONTAINER_REGISTRY: ghcr.io
+
+jobs:
+  build-and-publish:
+    runs-on: debian-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Podman
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install podman
+
+    - name: Login to Container Registry
+      run: echo ${{ secrets.GITHUB_TOKEN }} | podman login ${{ env.CONTAINER_REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+    - name: Build container
+      run: podman build -t ${CONTAINER_REGISTRY}/${{ github.repository }}/${IMAGE_NAME}:${IMAGE_TAG} .
+
+    - name: Push container
+      run: podman push ${CONTAINER_REGISTRY}/${{ github.repository }}/${IMAGE_NAME}:${IMAGE_TAG}
