@@ -2,7 +2,7 @@ import asyncio
 import socket
 import os
 from datetime import datetime
-from typing import List, Union, Dict
+from typing import List, Union, Dict, Optional
 from influxdb_client.client.write_api import SYNCHRONOUS, WriteApi
 from pychonet.lib.udpserver import UDPServer
 from pychonet import ECHONETAPIClient, HomeAirConditioner
@@ -12,12 +12,12 @@ from influxdb_client import InfluxDBClient, Point
 
 async def main(hosts: List[str], **kwargs) -> None: 
 
-    influx_client: Union[InfluxDBClient, None] = None
-    write_api: Union[WriteApi, None] = None
-    influx_token: Union[str, None] = kwargs.get("influx_token", None)
-    influx_bucket: Union[str, None] = kwargs.get("influx_bucket", None)
-    influx_url: Union[str, None] = kwargs.get("influx_url", None)
-    influx_org: Union[str, None] = kwargs.get("influx_org", None)
+    influx_client: Optional[InfluxDBClient] = None
+    write_api: Optional[WriteApi] = None
+    influx_token: Optional[str] = kwargs.get("influx_token", None)
+    influx_bucket: Optional[str] = kwargs.get("influx_bucket", None)
+    influx_url: Optional[str] = kwargs.get("influx_url", None)
+    influx_org: Optional[str] = kwargs.get("influx_org", None)
 
     udp: UDPServer = UDPServer()
     loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
@@ -61,11 +61,11 @@ async def main(hosts: List[str], **kwargs) -> None:
 
 if __name__ == '__main__':
     hosts: List[str] = os.environ.get("AIRCON_HOSTS", "").split()
-    influx_url: str = os.environ.get("INFLUX_URL", "")
-    influx_token: str = os.environ.get("INFLUX_TOKEN", "")
-    influx_bucket: str = os.environ.get("INFLUX_BUCKET", "")
-    influx_org: str = os.environ.get("INFLUX_ORG", "")
-    kwargs: Dict[str, str] = {
+    influx_url: Optional[str] = os.environ.get("INFLUX_URL", None)
+    influx_token: Optional[str] = os.environ.get("INFLUX_TOKEN", None)
+    influx_bucket: Optional[str] = os.environ.get("INFLUX_BUCKET", None)
+    influx_org: Optional[str] = os.environ.get("INFLUX_ORG", None)
+    kwargs: Dict[str, Optional[str]] = {
         "influx_url": influx_url,
         "influx_token": influx_token,
         "influx_bucket": influx_bucket,
