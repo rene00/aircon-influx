@@ -72,4 +72,4 @@ if __name__ == '__main__':
         "influx_org": influx_org,
     }
 
-    asyncio.run(main(hosts, kwargs=kwargs))
+    asyncio.run(main(hosts, **kwargs))
